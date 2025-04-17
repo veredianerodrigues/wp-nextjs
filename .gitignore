@@ -15,3 +15,4 @@ node_modules/
 /.vs/wp-nextjs/v17/DocumentLayout.json
 /.vs/wp-nextjs/FileContentIndex/bf0fd011-5690-480e-96e7-4391450629cb.vsidx
 *.sqlite-journal
+*.vsidx
