@@ -1,0 +1,17 @@
+# Dependências e build
+node_modules/
+.next/
+
+# Arquivos de configuração sensíveis
+.env.local
+
+# Mac, Windows, editor etc.
+.DS_Store
+/.vs/slnx.sqlite
+/.vs/VSWorkspaceState.json
+/.vs/wp-nextjs/FileContentIndex/3cb66df3-496e-45f3-97dd-7fc0f1874861.vsidx
+/.vs/wp-nextjs/FileContentIndex/9dcc8d43-f7e2-4d7a-8937-ac32e613cab4.vsidx
+/.vs/wp-nextjs/v17/.wsuo
+/.vs/wp-nextjs/v17/DocumentLayout.json
+/.vs/wp-nextjs/FileContentIndex/bf0fd011-5690-480e-96e7-4391450629cb.vsidx
+*.sqlite-journal
