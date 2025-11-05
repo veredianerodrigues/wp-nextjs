@@ -1,0 +1,253 @@
+<div class="form-container">
+  <div class="form-header">
+    <h1>Informações da Empresa</h1>
+    <p>Preencha os dados básicos da empresa</p>
+  </div>
+
+  <form [formGroup]="companyForm" (ngSubmit)="onSubmit()">
+
+    <!-- Grupo 1 - Identificação -->
+    <div class="form-section">
+      <h2 class="section-title">🧾 Identificação</h2>
+      <div class="form-grid">
+        <div class="form-field">
+          <label for="razaoSocial">Razão Social <span class="required">*</span></label>
+          <input
+            type="text"
+            id="razaoSocial"
+            formControlName="razaoSocial"
+            placeholder="Digite a razão social"
+            [class.error]="isFieldInvalid('razaoSocial')"
+          />
+          <span class="error-message" *ngIf="isFieldInvalid('razaoSocial')">
+            {{ getErrorMessage('razaoSocial') }}
+          </span>
+        </div>
+
+        <div class="form-field">
+          <label for="nomeFantasia">Nome Fantasia</label>
+          <input
+            type="text"
+            id="nomeFantasia"
+            formControlName="nomeFantasia"
+            placeholder="Digite o nome fantasia"
+          />
+        </div>
+
+        <div class="form-field">
+          <label for="categoria">Categoria</label>
+          <select id="categoria" formControlName="categoria">
+            <option value="">Selecione uma categoria</option>
+            <option *ngFor="let cat of categorias" [value]="cat">{{ cat }}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grupo 2 - Endereço -->
+    <div class="form-section">
+      <h2 class="section-title">📍 Endereço</h2>
+      <div class="form-grid">
+        <div class="form-field">
+          <label for="cep">CEP <span class="required">*</span></label>
+          <input
+            type="text"
+            id="cep"
+            formControlName="cep"
+            placeholder="00000-000"
+            (input)="formatCep($event)"
+            (blur)="onCepBlur()"
+            maxlength="9"
+            [class.error]="isFieldInvalid('cep')"
+          />
+          <span class="error-message" *ngIf="isFieldInvalid('cep')">
+            {{ getErrorMessage('cep') }}
+          </span>
+        </div>
+
+        <div class="form-field field-large">
+          <label for="endereco">Endereço <span class="required">*</span></label>
+          <input
+            type="text"
+            id="endereco"
+            formControlName="endereco"
+            placeholder="Digite o endereço"
+            [class.error]="isFieldInvalid('endereco')"
+          />
+          <span class="error-message" *ngIf="isFieldInvalid('endereco')">
+            {{ getErrorMessage('endereco') }}
+          </span>
+        </div>
+
+        <div class="form-field field-small">
+          <label for="numero">Número <span class="required">*</span></label>
+          <input
+            type="text"
+            id="numero"
+            formControlName="numero"
+            placeholder="Nº"
+            [class.error]="isFieldInvalid('numero')"
+          />
+          <span class="error-message" *ngIf="isFieldInvalid('numero')">
+            {{ getErrorMessage('numero') }}
+          </span>
+        </div>
+
+        <div class="form-field">
+          <label for="cidade">Cidade <span class="required">*</span></label>
+          <input
+            type="text"
+            id="cidade"
+            formControlName="cidade"
+            placeholder="Digite a cidade"
+            [class.error]="isFieldInvalid('cidade')"
+          />
+          <span class="error-message" *ngIf="isFieldInvalid('cidade')">
+            {{ getErrorMessage('cidade') }}
+          </span>
+        </div>
+
+        <div class="form-field">
+          <label for="estado">Estado <span class="required">*</span></label>
+          <select id="estado" formControlName="estado" [class.error]="isFieldInvalid('estado')">
+            <option value="">Selecione</option>
+            <option *ngFor="let uf of estados" [value]="uf">{{ uf }}</option>
+          </select>
+          <span class="error-message" *ngIf="isFieldInvalid('estado')">
+            {{ getErrorMessage('estado') }}
+          </span>
+        </div>
+
+        <div class="form-field">
+          <label for="complemento">Complemento</label>
+          <input
+            type="text"
+            id="complemento"
+            formControlName="complemento"
+            placeholder="Apto, bloco, etc."
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- Grupo 3 - Contato -->
+    <div class="form-section">
+      <h2 class="section-title">☎️ Contato</h2>
+      <div class="form-grid">
+        <div class="form-field">
+          <label for="telefone">Telefone <span class="required">*</span></label>
+          <input
+            type="text"
+            id="telefone"
+            formControlName="telefone"
+            placeholder="(00) 00000-0000"
+            (input)="formatTelefone($event)"
+            maxlength="15"
+            [class.error]="isFieldInvalid('telefone')"
+          />
+          <span class="error-message" *ngIf="isFieldInvalid('telefone')">
+            {{ getErrorMessage('telefone') }}
+          </span>
+        </div>
+
+        <div class="form-field">
+          <label for="email">E-mail <span class="required">*</span></label>
+          <input
+            type="email"
+            id="email"
+            formControlName="email"
+            placeholder="email@exemplo.com"
+            [class.error]="isFieldInvalid('email')"
+          />
+          <span class="error-message" *ngIf="isFieldInvalid('email')">
+            {{ getErrorMessage('email') }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grupo 4 - Dados Jurídicos -->
+    <div class="form-section">
+      <h2 class="section-title">🧮 Dados Jurídicos</h2>
+      <div class="form-grid">
+        <div class="form-field">
+          <label for="tipoContribuinte">Tipo de Contribuinte</label>
+          <select id="tipoContribuinte" formControlName="tipoContribuinte">
+            <option value="">Selecione</option>
+            <option *ngFor="let tipo of tiposContribuinte" [value]="tipo">{{ tipo }}</option>
+          </select>
+        </div>
+
+        <div class="form-field">
+          <label for="porte">Tamanho/Porte</label>
+          <select id="porte" formControlName="porte">
+            <option value="">Selecione</option>
+            <option *ngFor="let p of portes" [value]="p">{{ p }}</option>
+          </select>
+        </div>
+
+        <div class="form-field">
+          <label for="tipoEmpresa">Tipo de Empresa</label>
+          <select id="tipoEmpresa" formControlName="tipoEmpresa">
+            <option value="">Selecione</option>
+            <option *ngFor="let tipo of tiposEmpresa" [value]="tipo">{{ tipo }}</option>
+          </select>
+        </div>
+
+        <div class="form-field">
+          <label for="cnpjCpf">CNPJ / CPF <span class="required">*</span></label>
+          <input
+            type="text"
+            id="cnpjCpf"
+            formControlName="cnpjCpf"
+            placeholder="00.000.000/0000-00"
+            (input)="formatCnpjCpf($event)"
+            maxlength="18"
+            [class.error]="isFieldInvalid('cnpjCpf')"
+          />
+          <span class="error-message" *ngIf="isFieldInvalid('cnpjCpf')">
+            {{ getErrorMessage('cnpjCpf') }}
+          </span>
+        </div>
+
+        <div class="form-field">
+          <label for="inscricaoEstadualRg">Inscrição Estadual / RG</label>
+          <input
+            type="text"
+            id="inscricaoEstadualRg"
+            formControlName="inscricaoEstadualRg"
+            placeholder="Digite a inscrição estadual ou RG"
+          />
+        </div>
+
+        <div class="form-field">
+          <label for="inscricaoMunicipal">Inscrição Municipal</label>
+          <input
+            type="text"
+            id="inscricaoMunicipal"
+            formControlName="inscricaoMunicipal"
+            placeholder="Digite a inscrição municipal"
+          />
+        </div>
+
+        <div class="form-field">
+          <label for="formaSocietaria">Forma Societária</label>
+          <select id="formaSocietaria" formControlName="formaSocietaria">
+            <option value="">Selecione</option>
+            <option *ngFor="let forma of formasSocietarias" [value]="forma">{{ forma }}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Botão de ação -->
+    <div class="form-actions">
+      <button type="submit" class="btn-primary">
+        Avançar
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </button>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,42 @@
+<div class="form-container">
+  <div class="form-header">
+    <h1>Principais Clientes</h1>
+    <p>Informe os principais clientes da empresa</p>
+  </div>
+
+  <form [formGroup]="clientsForm" (ngSubmit)="onSubmit()">
+    <div class="form-section">
+      <div class="form-grid">
+        <div class="form-field">
+          <label for="nomeCliente">Nome do Cliente <span class="required">*</span></label>
+          <input type="text" id="nomeCliente" formControlName="nomeCliente" placeholder="Nome do cliente" />
+        </div>
+
+        <div class="form-field">
+          <label for="cnpjCliente">CNPJ</label>
+          <input type="text" id="cnpjCliente" formControlName="cnpjCliente" placeholder="00.000.000/0000-00" />
+        </div>
+
+        <div class="form-field">
+          <label for="telefoneCliente">Telefone</label>
+          <input type="text" id="telefoneCliente" formControlName="telefoneCliente" placeholder="(00) 00000-0000" />
+        </div>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="btn-secondary" (click)="voltar()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+        Voltar
+      </button>
+      <button type="submit" class="btn-primary">
+        Avançar
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </button>
+    </div>
+  </form>
+</div>

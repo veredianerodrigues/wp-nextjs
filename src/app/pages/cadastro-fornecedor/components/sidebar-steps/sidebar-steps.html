@@ -1,0 +1,30 @@
+<div class="sidebar-steps">
+  <div class="sidebar-header">
+    <h2>Cadastro de Fornecedor</h2>
+  </div>
+
+  <div class="steps-list">
+    <div
+      *ngFor="let step of steps"
+      class="step-item"
+      [class.active]="isStepActive(step.id)"
+      [class.completed]="isStepCompleted(step.id)"
+      [class.disabled]="!isStepAccessible(step.id)"
+      (click)="goToStep(step)">
+
+      <div class="step-indicator">
+        <div class="step-circle">
+          <span *ngIf="!isStepCompleted(step.id)">{{ step.id }}</span>
+          <svg *ngIf="isStepCompleted(step.id)" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </div>
+        <div class="step-line" *ngIf="step.id < steps.length"></div>
+      </div>
+
+      <div class="step-content">
+        <span class="step-label">{{ step.label }}</span>
+      </div>
+    </div>
+  </div>
+</div>

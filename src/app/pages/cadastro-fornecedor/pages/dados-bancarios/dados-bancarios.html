@@ -1,0 +1,51 @@
+<div class="form-container">
+  <div class="form-header">
+    <h1>Dados Bancários</h1>
+    <p>Informe os dados bancários para pagamento</p>
+  </div>
+
+  <form [formGroup]="bankForm" (ngSubmit)="onSubmit()">
+    <div class="form-section">
+      <div class="form-grid">
+        <div class="form-field">
+          <label for="banco">Banco <span class="required">*</span></label>
+          <input type="text" id="banco" formControlName="banco" placeholder="Nome do banco" />
+        </div>
+
+        <div class="form-field">
+          <label for="agencia">Agência <span class="required">*</span></label>
+          <input type="text" id="agencia" formControlName="agencia" placeholder="0000" />
+        </div>
+
+        <div class="form-field">
+          <label for="conta">Conta <span class="required">*</span></label>
+          <input type="text" id="conta" formControlName="conta" placeholder="00000-0" />
+        </div>
+
+        <div class="form-field">
+          <label for="tipoConta">Tipo de Conta <span class="required">*</span></label>
+          <select id="tipoConta" formControlName="tipoConta">
+            <option value="">Selecione</option>
+            <option value="corrente">Conta Corrente</option>
+            <option value="poupanca">Conta Poupança</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="btn-secondary" (click)="voltar()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+        Voltar
+      </button>
+      <button type="submit" class="btn-primary">
+        Avançar
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </button>
+    </div>
+  </form>
+</div>
