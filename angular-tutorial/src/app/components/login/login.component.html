@@ -1,0 +1,284 @@
+<!--
+========================================
+📚 AULA 5: TEMPLATES ANGULAR
+========================================
+
+Neste arquivo você vai aprender:
+1. Data Binding (ligação de dados)
+2. Diretivas estruturais (*ngIf, *ngFor)
+3. Diretivas de atributo ([class], [disabled])
+4. Event Binding ((click), (submit))
+5. Property Binding ([value], [disabled])
+6. Two-way Binding ([(ngModel)])
+-->
+
+<div class="login-container">
+  <!--
+  ========================================
+  💡 CONCEITO: *ngIf (Diretiva Estrutural)
+  ========================================
+
+  *ngIf adiciona ou remove elementos do DOM baseado em condição.
+
+  - Se isAuthenticated for TRUE: mostra painel de usuário
+  - Se isAuthenticated for FALSE: mostra formulário de login
+  -->
+
+  <!-- ==================== -->
+  <!-- PAINEL DE USUÁRIO LOGADO -->
+  <!-- ==================== -->
+  <div *ngIf="isAuthenticated" class="user-panel">
+    <div class="success-icon">✅</div>
+    <h2>Bem-vindo!</h2>
+
+    <!--
+    💡 CONCEITO: Interpolação {{ }}
+    Exibe valores de propriedades do componente
+    -->
+    <div class="user-info">
+      <p><strong>Nome:</strong> {{ currentUser?.name }}</p>
+      <p><strong>Email:</strong> {{ currentUser?.email }}</p>
+      <p><strong>Username:</strong> @{{ currentUser?.username }}</p>
+
+      <!--
+      💡 CONCEITO: Optional Chaining (?.)
+      Se currentUser for null, não dá erro - retorna undefined
+      -->
+      <p *ngIf="currentUser?.phone">
+        <strong>Telefone:</strong> {{ currentUser?.phone }}
+      </p>
+    </div>
+
+    <!--
+    💡 CONCEITO: Event Binding (click)
+    Liga evento de click ao método do componente
+    -->
+    <button type="button" class="btn btn-secondary" (click)="onLogout()">
+      Sair
+    </button>
+  </div>
+
+  <!-- ==================== -->
+  <!-- FORMULÁRIO DE LOGIN -->
+  <!-- ==================== -->
+  <!--
+  💡 CONCEITO: !isAuthenticated = NOT isAuthenticated
+  Só mostra o formulário se NÃO estiver autenticado
+  -->
+  <div *ngIf="!isAuthenticated" class="login-form">
+    <h2>🔐 Login</h2>
+    <p class="subtitle">Entre com suas credenciais</p>
+
+    <!--
+    ========================================
+    💡 CONCEITO: Reactive Forms
+    ========================================
+
+    [formGroup]: Liga o formulário HTML ao FormGroup do componente
+    (ngSubmit): Evento disparado quando o formulário é submetido
+    -->
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
+      <!-- ==================== -->
+      <!-- CAMPO EMAIL -->
+      <!-- ==================== -->
+      <div class="form-group">
+        <label for="email">Email:</label>
+
+        <!--
+        💡 CONCEITO: formControlName
+        Liga este input ao controle 'email' do FormGroup
+        -->
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          placeholder="seu@email.com"
+          class="form-control"
+          [class.invalid]="email.invalid && email.touched"
+        />
+
+        <!--
+        ========================================
+        💡 CONCEITO: Validações e Mensagens de Erro
+        ========================================
+
+        Mostra mensagens de erro específicas baseadas nas validações.
+
+        - email.invalid: Campo não passou nas validações
+        - email.touched: Usuário já interagiu com o campo
+        - email.errors?.['required']: Erro específico de campo obrigatório
+        -->
+        <div *ngIf="email.invalid && email.touched" class="error-message">
+          <small *ngIf="email.errors?.['required']">
+            ⚠️ Email é obrigatório
+          </small>
+          <small *ngIf="email.errors?.['email']">
+            ⚠️ Digite um email válido
+          </small>
+        </div>
+      </div>
+
+      <!-- ==================== -->
+      <!-- CAMPO SENHA -->
+      <!-- ==================== -->
+      <div class="form-group">
+        <label for="password">Senha:</label>
+
+        <input
+          id="password"
+          type="password"
+          formControlName="password"
+          placeholder="Digite sua senha"
+          class="form-control"
+          [class.invalid]="password.invalid && password.touched"
+        />
+
+        <div *ngIf="password.invalid && password.touched" class="error-message">
+          <small *ngIf="password.errors?.['required']">
+            ⚠️ Senha é obrigatória
+          </small>
+          <small *ngIf="password.errors?.['minlength']">
+            ⚠️ Senha deve ter no mínimo 4 caracteres
+          </small>
+        </div>
+      </div>
+
+      <!-- ==================== -->
+      <!-- MENSAGENS DE FEEDBACK -->
+      <!-- ==================== -->
+      <!--
+      Exibe mensagens de sucesso ou erro após tentativa de login
+      -->
+      <div *ngIf="successMessage" class="alert alert-success">
+        {{ successMessage }}
+      </div>
+
+      <div *ngIf="errorMessage" class="alert alert-error">
+        {{ errorMessage }}
+      </div>
+
+      <!-- ==================== -->
+      <!-- BOTÕES -->
+      <!-- ==================== -->
+      <div class="button-group">
+        <!--
+        💡 CONCEITO: Property Binding [disabled]
+        Desabilita o botão baseado em condições
+        -->
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="loginForm.invalid || isLoading"
+        >
+          <!--
+          💡 CONCEITO: Condicional no Template
+          Muda o texto do botão baseado no estado
+          -->
+          <span *ngIf="!isLoading">Entrar</span>
+          <span *ngIf="isLoading">⏳ Entrando...</span>
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-link"
+          (click)="fillExampleEmail()"
+          [disabled]="isLoading"
+        >
+          Usar email de exemplo
+        </button>
+      </div>
+    </form>
+
+    <!-- ==================== -->
+    <!-- INFORMAÇÕES ÚTEIS -->
+    <!-- ==================== -->
+    <div class="info-box">
+      <h4>📝 Para testar:</h4>
+      <p><strong>Email:</strong> Sincere@april.biz</p>
+      <p><strong>Senha:</strong> Qualquer senha com 4+ caracteres</p>
+      <p class="note">
+        💡 Estamos usando a API pública JSONPlaceholder. Qualquer email válido
+        da lista de usuários funcionará!
+      </p>
+    </div>
+
+    <!-- ==================== -->
+    <!-- EMAILS VÁLIDOS -->
+    <!-- ==================== -->
+    <div class="valid-emails">
+      <h4>✅ Outros emails válidos para teste:</h4>
+      <ul>
+        <li>Sincere@april.biz</li>
+        <li>Shanna@melissa.tv</li>
+        <li>Nathan@yesenia.net</li>
+        <li>Julianne.OConner@kory.org</li>
+        <li>Lucio_Hettinger@annie.ca</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ==================== -->
+  <!-- DEBUG INFO (Apenas para Aprendizado) -->
+  <!-- ==================== -->
+  <div class="debug-info">
+    <h4>🔍 Debug Info (Apenas Aprendizado)</h4>
+    <p><strong>Formulário Válido:</strong> {{ loginForm.valid ? '✅ Sim' : '❌ Não' }}</p>
+    <p><strong>Formulário Touched:</strong> {{ loginForm.touched ? '✅ Sim' : '❌ Não' }}</p>
+    <p><strong>Loading:</strong> {{ isLoading ? '⏳ Sim' : '❌ Não' }}</p>
+    <p><strong>Autenticado:</strong> {{ isAuthenticated ? '✅ Sim' : '❌ Não' }}</p>
+
+    <details>
+      <summary>Ver valores do formulário</summary>
+      <pre>{{ loginForm.value | json }}</pre>
+    </details>
+  </div>
+</div>
+
+<!--
+========================================
+🎯 RESUMO: Templates Angular
+========================================
+
+TIPOS DE BINDING:
+✅ Interpolação: {{ valor }}
+✅ Property Binding: [propriedade]="valor"
+✅ Event Binding: (evento)="metodo()"
+✅ Two-way Binding: [(ngModel)]="valor"
+
+DIRETIVAS ESTRUTURAIS:
+✅ *ngIf: Adiciona/remove elementos
+✅ *ngFor: Loop sobre arrays
+✅ *ngSwitch: Switch case no template
+
+DIRETIVAS DE ATRIBUTO:
+✅ [class.nome]: Adiciona classe condicionalmente
+✅ [style.propriedade]: Aplica estilo condicionalmente
+✅ [disabled]: Desabilita elemento
+
+FORMULÁRIOS REATIVOS:
+✅ [formGroup]: Liga FormGroup
+✅ formControlName: Liga FormControl
+✅ Validações automáticas
+✅ Mensagens de erro dinâmicas
+
+========================================
+💡 FLUXO DE INTERAÇÃO
+========================================
+
+1. Usuário digita no input
+   ↓
+2. formControlName atualiza FormControl
+   ↓
+3. Validações são executadas automaticamente
+   ↓
+4. *ngIf mostra/esconde mensagens de erro
+   ↓
+5. Usuário clica em "Entrar"
+   ↓
+6. (ngSubmit) chama onSubmit()
+   ↓
+7. Component processa login
+   ↓
+8. Template atualiza com novo estado
+-->
